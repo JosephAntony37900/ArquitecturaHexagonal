@@ -25,17 +25,19 @@ func main() {
     createProduct := application.NewCreateProduct(productRepo)
     getProducts := application.NewGetProducts(productRepo)
     updateProduct := application.NewUpdateProduct(productRepo)
+	deleteProduct := application.NewDeleteProduct(productRepo)
 
     // Controladores
     createProductController := controllers.NewCreateProductController(createProduct)
     getProductsController := controllers.NewGetProductsController(getProducts)
     updateProductController := controllers.NewUpdateProductController(updateProduct)
+	deleteProductController := controllers.NewDeleteProductController(deleteProduct)
 
     // Configuración del enrutador de Gin
     r := gin.Default()
 
     // Configurar rutas
-    routes.SetupProductRoutes(r, createProductController, getProductsController, updateProductController)
+    routes.SetupProductRoutes(r, createProductController, getProductsController, updateProductController, deleteProductController)
 
     // Iniciar servidor
     log.Println("Server started at :8080")
