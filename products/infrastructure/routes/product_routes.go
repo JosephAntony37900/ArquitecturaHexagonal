@@ -1,11 +1,13 @@
 package routes
 
 import (
-	"net/http"
-	"github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure/controllers"
-	"github.com/gorilla/mux"
+    "github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure/controllers"
+    "github.com/gin-gonic/gin"
 )
 
-func SetupProductRoutes(r *mux.Router, createProductController *controllers.CreateProductController) {
-	r.HandleFunc("/products", createProductController.Handle).Methods(http.MethodPost)
+func SetupProductRoutes(r *gin.Engine, createProductController *controllers.CreateProductController, getProductsController *controllers.GetProductsController, updateProductController *controllers.UpdateProductController) {
+    // Definir las rutas
+    r.POST("/products", createProductController.Handle)
+    r.GET("/products", getProductsController.Handle)
+    r.PUT("/products/:id", updateProductController.Handle)
 }
