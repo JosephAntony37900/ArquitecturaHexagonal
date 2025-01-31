@@ -3,10 +3,14 @@ package main
 import (
     "log"
     "github.com/JosephAntony37900/ArquitecturaHexagonal/helpers"
-    "github.com/JosephAntony37900/ArquitecturaHexagonal/products/application"
-    "github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure/controllers"
-    "github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure/repository"
-    "github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure/routes"
+    productApp "github.com/JosephAntony37900/ArquitecturaHexagonal/products/application"
+    productController "github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure/controllers"
+    productRepo "github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure/repository"
+    productRoutes "github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure/routes"
+    userApp "github.com/JosephAntony37900/ArquitecturaHexagonal/users/application"
+    userController "github.com/JosephAntony37900/ArquitecturaHexagonal/users/infrastructure/controllers"
+    userRepo "github.com/JosephAntony37900/ArquitecturaHexagonal/users/infrastructure/repository"
+    userRoutes "github.com/JosephAntony37900/ArquitecturaHexagonal/users/infrastructure/routes"
     "github.com/gin-gonic/gin"
 )
 
@@ -18,26 +22,36 @@ func main() {
     }
     defer db.Close()
 
-    // Repositorio
-    productRepo := repository.NewProductRepoMySQL(db)
+    // Repositorios
+    productRepository := productRepo.NewProductRepoMySQL(db)
+    userRepository := userRepo.NewCreateUserRepoMySQL(db)
 
-    // Casos de uso
-    createProduct := application.NewCreateProduct(productRepo)
-    getProducts := application.NewGetProducts(productRepo)
-    updateProduct := application.NewUpdateProduct(productRepo)
-	deleteProduct := application.NewDeleteProduct(productRepo)
+    // Casos de uso para productos
+    createProduct := productApp.NewCreateProduct(productRepository)
+    getProducts := productApp.NewGetProducts(productRepository)
+    updateProduct := productApp.NewUpdateProduct(productRepository)
+    deleteProduct := productApp.NewDeleteProduct(productRepository)
 
-    // Controladores
-    createProductController := controllers.NewCreateProductController(createProduct)
-    getProductsController := controllers.NewGetProductsController(getProducts)
-    updateProductController := controllers.NewUpdateProductController(updateProduct)
-	deleteProductController := controllers.NewDeleteProductController(deleteProduct)
+    // Casos de uso para usuarios
+    createUser := userApp.NewCreateUser(userRepository)
+
+    // Controladores para productos
+    createProductController := productController.NewCreateProductController(createProduct)
+    getProductsController := productController.NewGetProductsController(getProducts)
+    updateProductController := productController.NewUpdateProductController(updateProduct)
+    deleteProductController := productController.NewDeleteProductController(deleteProduct)
+
+    // Controladores para usuarios
+    createUserController := userController.NewCreateUserController(createUser)
 
     // Configuración del enrutador de Gin
     r := gin.Default()
 
-    // Configurar rutas
-    routes.SetupProductRoutes(r, createProductController, getProductsController, updateProductController, deleteProductController)
+    // Configurar rutas de productos
+    productRoutes.SetupProductRoutes(r, createProductController, getProductsController, updateProductController, deleteProductController)
+
+    // Configurar rutas de usuarios
+    userRoutes.SetupUserRoutes(r, createUserController)
 
     // Iniciar servidor
     log.Println("Server started at :8080")
