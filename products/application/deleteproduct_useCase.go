@@ -17,12 +17,12 @@ func (dp *DeleteProduct) Run(id int) error {
     // Verificar si el producto existe
     _, err := dp.repo.FindByID(id)
     if err != nil {
-        return fmt.Errorf("product not found: %w", err)
+        return fmt.Errorf("product no encontrado: %w", err)
     }
 
     // Eliminar el producto del repositorio
     if err := dp.repo.Delete(id); err != nil {
-        return fmt.Errorf("error deleting product: %w", err)
+        return fmt.Errorf("error eliminando product: %w", err)
     }
 
     return nil

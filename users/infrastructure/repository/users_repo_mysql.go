@@ -35,7 +35,7 @@ func (r *UserRepoMySQL) FindByID(id int) (*entities.User, error) {
 }
 
 func (r *UserRepoMySQL) FindAll() ([]entities.User, error) {
-	query := "SELECT id, name, email FROM users"
+	query := "SELECT id, name, email, password FROM users"
 	rows, err := r.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("error buscando los Users: %w", err)
@@ -45,7 +45,7 @@ func (r *UserRepoMySQL) FindAll() ([]entities.User, error) {
 	var Users []entities.User
 	for rows.Next() {
 		var User entities.User
-		if err := rows.Scan(&User.ID, &User.Name, &User.Email); err != nil {
+		if err := rows.Scan(&User.ID, &User.Name, &User.Email, &User.Password); err != nil {
 			return nil, err
 		}
 		Users = append(Users, User)

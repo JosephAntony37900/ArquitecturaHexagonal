@@ -15,16 +15,16 @@ func NewGetProductsController(getProducts *application.GetProducts) *GetProducts
 }
 
 func (c *GetProductsController) Handle(ctx *gin.Context) {
-    log.Println("Received request to get all products")
+    log.Println("Petición para listar todos los productos, recibido")
     // Obtener los productos
     products, err := c.getProducts.Run()
     if err != nil {
-        log.Printf("Error fetching products: %v", err)
+        log.Printf("Error buscando products: %v", err)
         ctx.JSON(500, gin.H{"error": err.Error()})
         return
     }
 
     // Devolver los productos en formato JSON
-    log.Printf("Returning %d products", len(products))
+    log.Printf("Retornando %d products", len(products))
     ctx.JSON(200, products)
 }

@@ -34,6 +34,7 @@ func main() {
 
     // Casos de uso para usuarios
     createUser := userApp.NewCreateUser(userRepository)
+    getUsers := userApp.NewGetUsers(userRepository)
 
     // Controladores para productos
     createProductController := productController.NewCreateProductController(createProduct)
@@ -43,6 +44,7 @@ func main() {
 
     // Controladores para usuarios
     createUserController := userController.NewCreateUserController(createUser)
+    getUserController := userController.NewUsersController(getUsers)
 
     // Configuración del enrutador de Gin
     r := gin.Default()
@@ -51,7 +53,7 @@ func main() {
     productRoutes.SetupProductRoutes(r, createProductController, getProductsController, updateProductController, deleteProductController)
 
     // Configurar rutas de usuarios
-    userRoutes.SetupUserRoutes(r, createUserController)
+    userRoutes.SetupUserRoutes(r, createUserController, getUserController)
 
     // Iniciar servidor
     log.Println("Server started at :8080")

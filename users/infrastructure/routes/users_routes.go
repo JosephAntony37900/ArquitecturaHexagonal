@@ -5,7 +5,8 @@ import (
     "github.com/gin-gonic/gin"
 )
 
-func SetupUserRoutes(r *gin.Engine, createUserControlle *controllers.CreateUserController) {
+func SetupUserRoutes(r *gin.Engine, createUserControlle *controllers.CreateUserController, getUserControlle *controllers.GetUsersController) {
 	//rutas
 	r.POST("/users", createUserControlle.Handle)
+	r.GET("/users", getUserControlle.Handle)
 }

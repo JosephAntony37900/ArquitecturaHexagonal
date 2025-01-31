@@ -18,7 +18,7 @@ func (up *UpdateProduct) Run(id int, name string, price float64) error {
 	// Verificar si el producto existe
 	product, err := up.repo.FindByID(id)
 	if err != nil {
-		return fmt.Errorf("product not found: %w", err)
+		return fmt.Errorf("product no encontrado: %w", err)
 	}
 
 	// Actualizar los campos del producto
@@ -27,7 +27,7 @@ func (up *UpdateProduct) Run(id int, name string, price float64) error {
 
 	// Guardar los cambios en el repositorio
 	if err := up.repo.Update(*product); err != nil {
-		return fmt.Errorf("error updating product: %w", err)
+		return fmt.Errorf("error actualizando product: %w", err)
 	}
 
 	return nil
