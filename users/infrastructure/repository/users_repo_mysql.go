@@ -55,7 +55,7 @@ func (r *UserRepoMySQL) FindAll() ([]entities.User, error) {
 
 func (r *UserRepoMySQL) Update(User entities.User) error {
 	query := "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?"
-	_, err := r.db.Exec(query, User.Name, User.Email, User.ID, User.Password)
+	_, err := r.db.Exec(query, User.Name, User.Email,User.Password ,User.ID )
 	if err != nil {
 		return fmt.Errorf("error actualizando User: %w", err)
 	}
