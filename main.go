@@ -1,10 +1,14 @@
 package main
 
 import (
-	"github.com/JosephAntony37900/ArquitecturaHexagonal/products/application"
-	"github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure"
-	"github.com/JosephAntony37900/ArquitecturaHexagonal/helpers"
 	"log"
+	"net/http"
+	"github.com/JosephAntony37900/ArquitecturaHexagonal/helpers"
+	"github.com/JosephAntony37900/ArquitecturaHexagonal/products/application"
+	"github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure/controllers"
+	"github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure/repository"
+	"github.com/JosephAntony37900/ArquitecturaHexagonal/products/infrastructure/routes"
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -15,12 +19,20 @@ func main() {
 	}
 	defer db.Close()
 
-	// Crear repositorio e instancia del caso de uso
-	productRepo := infrastructure.NewProductRepoMySQL(db)
+	// Repositorio y casos de uso
+	productRepo := repository.NewProductRepoMySQL(db)
 	createProduct := application.NewCreateProduct(productRepo)
 
-	// Crear un producto
-	if err := createProduct.Run("Producto 1", 100.50); err != nil {
-		log.Fatalf("Error creating product: %v", err)
+	// Controladores
+	createProductController := controllers.NewCreateProductController(createProduct)
+
+	// Configuración del router
+	r := mux.NewRouter()
+	routes.SetupProductRoutes(r, createProductController)
+
+	// Iniciar servidor
+	log.Println("Server started at :8080")
+	if err := http.ListenAndServe(":8080", r); err != nil {
+		log.Fatalf("Error starting server: %v", err)
 	}
 }
