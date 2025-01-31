@@ -5,8 +5,9 @@ import (
     "github.com/gin-gonic/gin"
 )
 
-func SetupUserRoutes(r *gin.Engine, createUserControlle *controllers.CreateUserController, getUserControlle *controllers.GetUsersController) {
+func SetupUserRoutes(r *gin.Engine, createUserControlle *controllers.CreateUserController, getUserControlle *controllers.GetUsersController, deleteUserControlle *controllers.DeleteUserController) {
 	//rutas
 	r.POST("/users", createUserControlle.Handle)
 	r.GET("/users", getUserControlle.Handle)
+	r.DELETE("/delete/users/:id", deleteUserControlle.Handle)
 }
